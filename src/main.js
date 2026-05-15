@@ -1,3 +1,4 @@
+import './style.css'
 const DATABASES = [
   { id: 'selecoes', label: 'Seleções Brasileiras' },
   { id: 'geral', label: 'Geral' },
@@ -422,7 +423,17 @@ function bindAppEvents() {
     updateList()
   })
   const btnAdd = document.getElementById('btn-add'); if (btnAdd) btnAdd.addEventListener('click', () => openForm(null))
-  document.getElementById('btn-logout').addEventListener('click', async () => {
+  document.// Tab switching
+  document.querySelectorAll('.tab-item[data-db]').forEach(tab => {
+    tab.addEventListener('click', () => {
+      if (state.activeDb === tab.dataset.db) return
+      state.activeDb = tab.dataset.db
+      document.querySelectorAll('.tab-item').forEach(t => t.classList.toggle('active', t.dataset.db === state.activeDb))
+      state.players = []; state.filtered = []
+      loadPlayers()
+    })
+  })
+  getElementById('btn-logout').addEventListener('click', async () => {
     resetState()
     await supabase.auth.signOut()
   })
